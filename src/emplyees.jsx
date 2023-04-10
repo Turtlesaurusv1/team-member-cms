@@ -88,14 +88,56 @@ const Employee = () => {
       teamName: "TeamD",
     },
   ]);
+
+  function handleTeamSelected(event) {
+    console.log(event.target.value);
+    setTeam(event.target.value);
+  }
+
+  function handleEmployeeCard(event) {
+    const transformed = employee.map((employee) =>
+      employee.id === parseInt(event.currntTarget.id)
+        ? employee.teamName === selectedTeam
+          ? { ...employee, teamName: "" }
+          : { ...employee, teamName: selectedTeam }
+        : employee
+    );
+
+    setEmployee(transformed)
+  }
+
+  const [selectedTeam, setTeam] = useState("teamB");
   return (
     <main className="container">
       <div className="row justify-content-center mt-3 mb-3">
         <div className="col-8">
+          <select
+            className="form-select form-select-pg"
+            value={selectedTeam}
+            onChange={handleTeamSelected}
+          >
+            <option value="teamA">TeamA</option>
+            <option value="teamB">TeamB</option>
+            <option value="teamC">TeamC</option>
+            <option value="teamD">TeamD</option>
+          </select>
+        </div>
+      </div>
+      <div className="row justify-content-center mt-3 mb-3">
+        <div className="col-8">
           <div className="card-collection">
             {employee.map((employee) => (
-              <div id={employee.id} className="card m-2" style={{cursor:'pointer'}}>
-                <img src={femaleProfile} className="card-image-top" />
+              <div
+                id={employee.id}
+                className="card m-2"
+                style={{ cursor: "pointer" }}
+                onClick={handleEmployeeCard}
+              >
+                {employee.gender === "male" ? (
+                  <img src={maleProfile} className="card-image-top" />
+                ) : (
+                  <img src={femaleProfile} className="card-image-top" />
+                )}
                 <div className="card-body">
                   <h5 className="card-title">Full Name: {employee.fullName}</h5>
                   <p className="card-text">
